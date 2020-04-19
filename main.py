@@ -16,7 +16,7 @@ def add_user():
     if _name and _email and _password and request.method == 'POST':
         _hashed_password = generate_password_hash(_password)
         mongo.db.user.insert({'name':_name, 'email':_email, 'password':_hashed_password})
-        res = jsonify(message='User added successfully')
+        res = jsonify(message='User added successfully!')
         res.status_code = 200
         return res
     else:
