@@ -1,10 +1,11 @@
 from app import app, mongo
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-from flask import jsonify, request
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify, request, Response
+from werkzeug.security import generate_password_hash
+from flask_swagger_ui import get_swaggerui_blueprint
 
-@app.route('/user/add', methods=['POST'])
+@app.route('/api/user/add', methods=['POST'])
 def add_user():
     _json = request.json
     _name = _json['name']
@@ -21,21 +22,21 @@ def add_user():
     else:
         return jsonify('Failed to add user.')
 
-@app.route('/users')
+@app.route('/api/user')
 def get_users():
     users = mongo.db.user.find()
     count = mongo.db.user.estimated_document_count()
     responses = {"message":"Data found!", "data":users, "total_records":count}
     res = dumps(responses)
-    return res
+    return Response(res, mimetype="application/json")
 
-@app.route('/user/<id>')
+@app.route('/api/user/<id>')
 def get_user(id):
     user = mongo.db.user.find_one({'_id': ObjectId(id)})
     res = dumps({"message":"User found!", "data":user})
-    return res
+    return Response(res, mimetype="application/json")
 
-@app.route('/user/update', methods=['PUT'])
+@app.route('/api/user/update', methods=['PUT'])
 def update_user():
     _json = request.json
     _id = _json['_id']
@@ -52,11 +53,29 @@ def update_user():
     else:
         return jsonify("Failed to update user")
 
-@app.route('/user/delete/<id>', methods=['DELETE'])
+@app.route('/api/user/delete/<id>', methods=['DELETE'])
 def delete_user(id):
     mongo.db.user.delete_one({'_id':ObjectId(id)})
     res = jsonify(message="Delete user successfully!")
     return res
 
+@app.route('/swagger')
+def root():
+    return app.send_static_file('swagger.json')
+
 if __name__ == '__main__':
+    swagger_url = "/api-docs"
+    api_url = "http://localhost:5000/swagger"
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        swagger_url,
+        api_url,
+        config={
+            'swagger': '2.0',
+            'app_name': "Rest API with Flask and MongoDB"
+        }
+    )
+
+    app.register_blueprint(swaggerui_blueprint, url_prefix=swagger_url)
     app.run(debug=True)
+
