@@ -40,7 +40,10 @@
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "type": "object"
+                            "type": "array",
+                            "items":{
+                                "$ref":"#/components/schemas/User"
+                            }
                         }
                     },
                     "400": {
@@ -72,7 +75,8 @@
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "type": "object"
+                            "type": "object",
+                            "$ref":"#/components/schemas/User"
                         }
                     },
                     "400": {
@@ -99,7 +103,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref":"#/components/schemas/User"
+                            "$ref":"#/components/schemas/AddUser"
                         }
                     }
                 ],
@@ -134,7 +138,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref":"#/components/schemas/UpdatedUser"
+                            "$ref":"#/components/schemas/User"
                         }
                     }
                 ],
@@ -186,7 +190,7 @@
     },
     "components":{
         "schemas":{
-            "User": {
+            "AddUser": {
                 "type": "object",
                 "properties": {
                     "name": {
@@ -200,7 +204,7 @@
                     }
                 }
             },
-            "UpdatedUser": {
+            "User": {
                 "type": "object",
                 "properties": {
                     "_id":{
