@@ -95,14 +95,79 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "List of user",
+                        "description": "User",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "items": {
-                                "$ref": "#/definitions/User"
-                            }
+                            "$ref":"#/components/schemas/User"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/user/update": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "description": "Update user by id",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref":"#/components/schemas/UpdatedUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/user/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user by id",
+                "description": "Delete specific user by id from database",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id that needs to be queried",
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -119,27 +184,39 @@
             }
         }
     },
-    "definitions":{
-        "User": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
+    "components":{
+        "schemas":{
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
                 }
             },
-            "xml": {
-                "name": "User"
+            "UpdatedUser": {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type":"string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
             }
         }
-    },
-    "externalDocs": {
-        "description": "Find out more about Swagger",
-        "url": "http://swagger.io"
     }
 }
